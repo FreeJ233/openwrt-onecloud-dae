@@ -33,7 +33,7 @@ git clone -b master --depth 1 --single-branch https://github.com/jerrykuku/luci-
 git clone -b master --depth 1 --single-branch https://github.com/shiyu1314/luci-app-homeproxy package/xd/luci-app-homeproxy
 git clone -b master --depth 1 --single-branch https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone -b v5-lua --depth 1 --single-branch https://github.com/sbwml/luci-app-mosdns package/luci-app-mosdns
-
+git clone https://github.com/QiuSimons/luci-app-daed package/dae
 
 
 ./scripts/feeds update -a
