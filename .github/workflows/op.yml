@@ -13,7 +13,7 @@ on:
       OP_IP:
         description: '静态IP地址'     
         required: false
-        default: '192.168.2.2' 
+        default: '192.168.5.10' 
         type: string
 
       OP_rootfs:
@@ -33,7 +33,11 @@ on:
         required: false
         default: 'luci-app-dockerman luci-app-mosdns luci-theme-argon luci-app-ttyd luci-app-diskman luci-app-hd-idle luci-app-homeproxy luci-app-samba4 luci-app-adguardhome luci-app-emby luci-app-usb-printer luci-app-mwan3'
         type: string
-
+        
+      ssh:
+        description: 'SSH connection to Actions'
+        required: true
+        default: 'true'
 env:
   TZ: Asia/Shanghai
   DIY_P3_SH: sh/ad.sh
@@ -142,6 +146,23 @@ jobs:
         CONFIG_KERNEL_EXT4_FS_SECURITY=y
         # CONFIG_TARGET_ROOTFS_SQUASHFS is not set
         # CONFIG_PACKAGE_dnsmasq is not set
+        CONFIG_BPF=y
+        CONFIG_BPF_SYSCALL=y
+        CONFIG_BPF_JIT=y
+        CONFIG_CGROUPS=y
+        CONFIG_KPROBES=y
+        CONFIG_NET_INGRESS=y
+        CONFIG_NET_EGRESS=y
+        CONFIG_NET_SCH_INGRESS=m
+        CONFIG_NET_CLS_BPF=m
+        CONFIG_NET_CLS_ACT=y
+        CONFIG_BPF_STREAM_PARSER=y
+        CONFIG_DEBUG_INFO=y
+        # CONFIG_DEBUG_INFO_REDUCED is not set
+        CONFIG_DEBUG_INFO_BTF=y
+        CONFIG_KPROBE_EVENTS=y
+        CONFIG_BPF_EVENTS=y
+        CONFIG_BPF_JIT_DEFAULT_ON=y
 
         CONFIG_PACKAGE_dnsmasq-full=y
         CONFIG_PACKAGE_luci-app-firewall=y
@@ -179,7 +200,13 @@ jobs:
         for plugin in "${plugins[@]}"; do
           echo "CONFIG_PACKAGE_${plugin}=y" >> openwrt/.config
         done
-     
+
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
     
     - name: 下载编译依赖
       id: package
