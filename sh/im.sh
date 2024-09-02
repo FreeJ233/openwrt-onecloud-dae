@@ -13,6 +13,7 @@ echo 'src-git xd https://github.com/shiyu1314/openwrt-packages' >>feeds.conf.def
 git clone -b master --depth 1 --single-branch https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone -b v5-lua --depth 1 --single-branch https://github.com/sbwml/luci-app-mosdns package/luci-app-mosdns
 git clone -b master --depth 1 --single-branch https://github.com/shiyu1314/luci-app-homeproxy package/xd/luci-app-homeproxy
+git clone https://github.com/QiuSimons/luci-app-daed package/dae
 
 
 ./scripts/feeds update -a
